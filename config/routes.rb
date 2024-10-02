@@ -1,4 +1,19 @@
 Rails.application.routes.draw do
+  resources :resumes do
+    resources :experiences, only: [ :new, :create, :edit, :update, :destroy ]
+    resources :skills, only: [ :new, :create, :destroy ]
+    resources :projects, only: [ :new, :create, :destroy ]
+    resources :contact_links, only: [ :new, :create, :destroy ]
+  end
+
+  get "resumes/:id/public", to: "resumes#public", as: "public_resume"
+
+  # Ruta para descargar el CV como PDF
+  get "resumes/:id/download", to: "resumes#download", as: "download_resume"
+
+
+  devise_for :users, controllers: { registrations: "users/registrations" }
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -10,5 +25,5 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "dashboard#index"
 end

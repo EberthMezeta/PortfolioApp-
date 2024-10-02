@@ -1,0 +1,230 @@
+<h2 class="text-center mb-4">Detalles del Currículum</h2>
+<div class="text-center">
+  <%= link_to 'Regresar', root_path, class: 'btn btn-secondary' %>
+</div>
+
+<% if @resume.present? %>
+  <input type="hidden" id="resumeId" value="<%= @resume.id %>">
+
+  <div class="resume-details mb-4">
+  
+<div class="d-flex justify-content-center align-items-center p-3 mb-3" style="gap: 0.5rem;">
+  <div class="text-center">
+    <span><strong><%= @resume.user.first_name.present? ? @resume.user.first_name : 'Debe agregar datos en el campo First Name.' %></strong></span>
+    <span><strong><%= @resume.user.last_name.present? ? @resume.user.last_name : 'Debe agregar datos en el campo Last Name.' %></strong></span>
+  </div>
+  <div class="text-center">
+    <span><strong><%= @resume.user.occupation.present? ? @resume.user.occupation : 'Debe agregar datos en el campo Occupation.' %></strong></span>
+  </div>
+  <div class="text-center">
+    <span><strong><%= @resume.user.email.present? ? @resume.user.email : 'Debe agregar datos en el campo Email.' %></strong></span>
+  </div>
+</div>
+
+
+<div class="m-5">
+  <h3 class="d-flex justify-content-between align-items-center">
+    Enlaces de Contacto
+<%= link_to "Add Contact Link", "#", class: "btn btn-primary mb-3", data: { toggle: "modal", target: "#contactLinkModal" } %>
+
+  </h3>
+  <div class="card p-3 mb-3">
+    <% if @resume.contact_links.any? %>
+      <ul>
+        <% @resume.contact_links.each do |link| %>
+          <li>
+            <%= link.url.present? ? link.url : 'Debe agregar datos en el campo Enlace de Contacto.' %>
+<%= link_to 'Eliminar', resume_contact_link_path(@resume, link), class: 'btn btn-danger btn-sm ms-2 delete-contact-link', data: { id: link.id } %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No hay enlaces de contacto registrados.</p>
+    <% end %>
+  </div>
+
+  <h3 class="d-flex justify-content-between align-items-center">
+    Habilidades
+<%= link_to "Add Skill", "#", class: "btn btn-primary mb-3", data: { toggle: "modal", target: "#skillModal" } %>
+
+  </h3>
+  <div class="card p-3 mb-3">
+    <% if @resume.skills.any? %>
+      <ul>
+        <% @resume.skills.each do |skill| %>
+          <li>
+            <%= skill.name.present? ? skill.name : 'Debe agregar datos en el campo Habilidad.' %>
+<%= link_to 'Eliminar', resume_skill_path(@resume, skill), class: 'btn btn-danger btn-sm ms-2 delete-skill', data: { id: skill.id } %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No hay habilidades registradas.</p>
+    <% end %>
+  </div>
+
+  <h3 class="d-flex justify-content-between align-items-center">
+    Proyectos
+<%= link_to "Add Project", "#", class: "btn btn-primary mb-3", data: { toggle: "modal", target: "#projectModal" } %>
+  </h3>
+  <div class="card p-3 mb-3">
+    <% if @resume.projects.any? %>
+      <ul>
+        <% @resume.projects.each do |project| %>
+          <li>
+            <%= project.title.present? ? project.title : 'Debe agregar datos en el campo Proyecto.' %>
+      <%= link_to 'Eliminar', resume_project_path(@resume, project), class: 'btn btn-danger btn-sm ms-2 delete-project', data: { id: project.id } %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No hay proyectos registrados.</p>
+    <% end %>
+  </div>
+
+  <h3 class="d-flex justify-content-between align-items-center">
+    Experiencia Laboral
+<%= link_to "Add Experience", "#", class: "btn btn-primary", data: { toggle: "modal", target: "#experienceModal" } %>
+  </h3>
+  <div class="card p-3 mb-3">
+    <% if @resume.experiences.any? %>
+      <ul>
+        <% @resume.experiences.each do |experience| %>
+          <li>
+            <%= experience.job_title.present? ? experience.job_title : 'Debe agregar datos en el campo Experiencia.' %>
+<%= link_to 'Eliminar', resume_experience_path(@resume, experience), class: 'btn btn-danger btn-sm ms-2 delete-experience', data: { id: experience.id } %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No hay experiencias registradas.</p>
+    <% end %>
+  </div>
+</div> 
+<% else %>
+  <p>No se encontró el currículum.</p>
+<% end %>
+
+<div class="modal fade" id="contactLinkModal" tabindex="-1" aria-labelledby="contactLinkModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactLinkModalLabel">Agregar Enlace de Contacto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="contactLinkForm">
+          <div class="mb-3">
+            <label for="contactLinkPlatform" class="form-label">Plataforma</label>
+            <input type="text" class="form-control" id="contactLinkPlatform" required>
+          </div>
+          <div class="mb-3">
+            <label for="contactLinkUrl" class="form-label">URL</label>
+            <input type="text" class="form-control" id="contactLinkUrl" required>
+          </div>
+          <div class="error-message text-danger" id="contactLinkError"></div>
+          <button type="button" id="createContactLinkButton" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="skillModal" tabindex="-1" aria-labelledby="skillModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="skillModalLabel">Agregar Habilidad</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="skillForm">
+          <div class="mb-3">
+            <label for="skillName" class="form-label">Nombre de Habilidad</label>
+            <input type="text" class="form-control" id="skillName" required>
+          </div>
+          <div class="mb-3">
+            <label for="skillType" class="form-label">Tipo de Habilidad</label>
+            <select class="form-select" id="skillType" required>
+              <option value="0">Habilidad Técnica</option>
+              <option value="1">Habilidad Blanda</option>
+            </select>
+          </div>
+          <div class="error-message text-danger" id="skillError"></div>
+          <button type="button" id="createSkillButton" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="projectModalLabel">Agregar Proyecto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="projectForm">
+          <div class="mb-3">
+            <label for="projectTitle" class="form-label">Título del Proyecto</label>
+            <input type="text" class="form-control" id="projectTitle" required>
+          </div>
+          <div class="mb-3">
+            <label for="projectDescription" class="form-label">Descripción</label>
+            <textarea class="form-control" id="projectDescription" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="projectUrl" class="form-label">URL del Proyecto</label>
+            <input type="text" class="form-control" id="projectUrl" required>
+          </div>
+          <div class="error-message text-danger" id="projectError"></div>
+          <button type="button" id="createProjectButton" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="experienceModalLabel">Agregar Experiencia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="experienceForm">
+          <div class="mb-3">
+            <label for="experienceJobTitle" class="form-label">Título de la Experiencia</label>
+            <input type="text" class="form-control" id="experienceJobTitle" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceCompany" class="form-label">Compañía</label>
+            <input type="text" class="form-control" id="experienceCompany" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceStartDate" class="form-label">Fecha de Inicio</label>
+            <input type="date" class="form-control" id="experienceStartDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceEndDate" class="form-label">Fecha de Fin</label>
+            <input type="date" class="form-control" id="experienceEndDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceDescription" class="form-label">Descripción</label>
+            <textarea class="form-control" id="experienceDescription" required></textarea>
+          </div>
+          <div class="error-message text-danger" id="experienceError"></div>
+          <button type="button" id="createExperienceButton" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_include_tag 'contactLink' %>
+<%= javascript_include_tag 'experience' %>
+<%= javascript_include_tag 'projects' %>
+<%= javascript_include_tag 'skill' %>
