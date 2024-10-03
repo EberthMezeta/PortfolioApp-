@@ -4,13 +4,14 @@ Rails.application.routes.draw do
     resources :skills, only: [ :new, :create, :destroy ]
     resources :projects, only: [ :new, :create, :destroy ]
     resources :contact_links, only: [ :new, :create, :destroy ]
+    member do
+      post "generate_public_link" # Ruta para generar el hash
+    end
   end
-
-  get "resumes/:id/public", to: "resumes#public", as: "public_resume"
-
   # Ruta para descargar el CV como PDF
   get "resumes/:id/download", to: "resumes#download", as: "download_resume"
 
+  get "resumes/:id/public", to: "resumes#public", as: "public_resume"
 
   devise_for :users, controllers: { registrations: "users/registrations" }
 

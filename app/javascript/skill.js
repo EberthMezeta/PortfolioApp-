@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const name = nameInput.value;
     const type = typeInput.value;
 
-
-
-
     try {
       const response = await fetch(`/resumes/${resumeId}/skills`, {
         method: 'POST',
@@ -63,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error(errorResponse.error || 'Error al eliminar la habilidad.');
           }
 
-          this.closest('li').remove(); // Elimina el elemento de la lista
+          location.reload();
 
         } catch (error) {
           alert('Error al eliminar la habilidad: ' + error.message); // Muestra el mensaje de error

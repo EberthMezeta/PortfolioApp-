@@ -6,7 +6,10 @@
 
   <%= render 'header' %> <!-- Renderiza el partial de encabezado -->
 
-  <%= link_to "New Resume", "#", class: "btn btn-success mb-3", data: { toggle: "modal", target: "#newResumeModal" } %>
+<%= link_to "New Resume", "#", class: "btn btn-success mb-3", data: { "bs-toggle": "modal", "bs-target": "#newResumeModal" } %>
+
+
+
 
   <h3>Your Resumes</h3>
 
@@ -26,7 +29,26 @@
               <div>
   <%= link_to 'Edit', edit_resume_path(resume), class: 'btn btn-warning btn-sm me-1' %>
   <%= link_to 'Delete', '#', class: 'btn btn-danger btn-sm me-1 delete-resume', data: { id: resume.id }, title: 'Delete Resume' %>
-  <%= link_to 'Download', download_resume_path(resume), class: 'btn btn-success btn-sm' %>
+<button id="downloadResume" class="btn btn-success btn-sm" data-id="<%= resume.id %>">Download</button>
+<%= link_to 'View', resume_path(resume), class: 'btn btn-info btn-sm me-1', title: 'View Resume' %>
+<% if resume.hash_id.nil? %>
+  <%= button_to 'Generar enlace público', generate_public_link_resume_path(resume), method: :post, class: 'btn btn-primary btn-sm me-1' %>
+<% else %>
+  <button class="btn btn-info btn-sm me-1 copy-link-btn" data-url="<%= public_resume_url(resume.hash_id) %>">Copiar enlace</button>
+  
+<% end %>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Enlace copiado al portapapeles.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
 </div>
 
             </div>
@@ -40,16 +62,12 @@
 
 </div>
 
-<!-- Modal -->
-<!-- Modal -->
 <div class="modal fade" id="newResumeModal" tabindex="-1" role="dialog" aria-labelledby="newResumeModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="newResumeModalLabel">Create New Resume</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div id="error-message" class="alert alert-danger d-none"></div> <!-- Mensaje de error -->
@@ -62,11 +80,78 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" id="createResumeButton" class="btn btn-primary">Create Resume</button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById('downloadResume').addEventListener('click', function() {
+  const resumeId = this.getAttribute('data-id');
+  const url = `/resumes/${resumeId}/download`; // Ajusta según tu ruta
+
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/pdf',
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.blob(); // Convierte la respuesta a blob
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob); // Crea un URL del blob
+    const a = document.createElement('a'); // Crea un elemento <a>
+    a.style.display = 'none'; // Oculta el elemento
+    a.href = url; // Asigna el URL del blob
+    a.download = `resume_${resumeId}.pdf`; // Nombre del archivo para descargar
+    document.body.appendChild(a); // Añade el elemento al DOM
+    a.click(); // Simula un clic en el elemento
+    window.URL.revokeObjectURL(url); // Libera la URL del blob
+    document.body.removeChild(a); // Remueve el elemento del DOM
+  })
+  .catch(error => {
+    console.error('Error downloading the PDF:', error);
+  });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const copyButtons = document.querySelectorAll('.copy-link-btn');
+  const copyToast = new bootstrap.Toast(document.getElementById('copyToast'));
+
+  copyButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const url = button.getAttribute('data-url');
+
+      // Crea un elemento temporal para copiar el texto al portapapeles
+      const tempInput = document.createElement('input');
+      tempInput.value = url;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+
+      // Mostrar el toast
+      copyToast.show();
+
+      // Cambiar el texto del botón brevemente para indicar éxito
+      const originalText = button.innerText;
+      button.innerText = 'Copiado!';
+      setTimeout(() => {
+        button.innerText = originalText;
+      }, 2000); // Restaurar el texto original después de 2 segundos
+    });
+  });
+});
+
+
+
+</script>
 
 <%= javascript_include_tag 'resumes' %>

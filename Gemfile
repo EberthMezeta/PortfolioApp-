@@ -60,6 +60,7 @@ gem "devise"
 gem "cancancan"
 gem "wicked_pdf"
 gem "wkhtmltopdf-binary"
-gem "jquery-rails" # Para usar jQuery
-gem "bootstrap", "~> 5.0.0" # Para diseño responsi
+gem "jquery-rails"
+gem "bootstrap"
+gem "sassc-rails"
 gem "ostruct"

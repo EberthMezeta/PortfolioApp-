@@ -1,6 +1,6 @@
 class ResumesController < ApplicationController
-  before_action :authenticate_user!
- before_action :set_resume, only: [ :edit, :update, :destroy ]
+before_action :authenticate_user!, except: [ :public ]
+ before_action :set_resume, only: [ :edit, :update, :destroy, :generate_public_link ]
 
   def index
     @resumes = current_user.resumes
@@ -8,7 +8,7 @@ class ResumesController < ApplicationController
   end
 
   def show
-    render json: @resume
+    @resume = Resume.find(params[:id])
   end
 
   def edit
@@ -45,10 +45,34 @@ class ResumesController < ApplicationController
     end
   end
 
+  def download
+     @resume = Resume.find(params[:id]) # Asegúrate de que este modelo esté definido y sea correcto.
+
+    respond_to do |format|
+     format.pdf do
+        render pdf: "resume_#{@resume.id}", template: "resumes/show", formats: [ :html ], locals: { resume: @resume }
+      end
+    end
+  end
+
+  def generate_public_link
+    @resume.generate_hash_id
+    redirect_to resumes_path, notice: "Enlace público generado con éxito."
+  end
+
+  # Acción para mostrar la versión pública del currículum
+  def public
+    @resume = Resume.find_by(hash_id: params[:id])
+    if @resume.nil?
+      redirect_to root_path, alert: "El currículum no existe."
+    else
+      render :show # Asegúrate de tener una vista llamada 'public.html.erb'
+    end
+  end
+
   private
 
   def set_resume
-    Rails.logger.debug "Currículum ID: #{params[:id]}"
     @resume = current_user.resumes.find_by(id: params[:id]) # Asegúrate de que el usuario tenga acceso al CV
   end
 

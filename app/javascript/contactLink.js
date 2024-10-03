@@ -41,31 +41,33 @@ document.addEventListener('DOMContentLoaded', function () {
   const deleteContactLinks = document.querySelectorAll('.delete-contact-link');
 
   deleteContactLinks.forEach(link => {
-    link.addEventListener('click', function (event) {
+    link.addEventListener('click', async function (event) {
       event.preventDefault(); // Evita la acción por defecto del enlace
       const contactLinkId = this.dataset.id; // Obtiene el ID del enlace de contacto
       const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este enlace de contacto?");
 
       if (confirmDelete) {
-        fetch(`/resumes/${resumeId}/contact_links/${contactLinkId}`, {
-          method: 'DELETE',
-          headers: {
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-          }
-        })
-          .then(response => {
-            if (response.ok) {
-              // Elimina el elemento del DOM
-              this.closest('li').remove();
-            } else {
-              alert('Error al eliminar el enlace de contacto.');
+        try {
+          const response = await fetch(`/resumes/${resumeId}/contact_links/${contactLinkId}`, {
+            method: 'DELETE',
+            headers: {
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
-          })
-          .catch(error => {
-            console.error('Error:', error);
           });
+
+          if (response.ok) {
+            // Elimina el elemento del DOM
+            location.reload();
+          } else {
+            alert('Error al eliminar el enlace de contacto.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Ocurrió un error al intentar eliminar el enlace de contacto.');
+        }
       }
     });
   });
+
 
 });

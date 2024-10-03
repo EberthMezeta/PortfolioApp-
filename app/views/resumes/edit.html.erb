@@ -1,4 +1,4 @@
-<h2 class="text-center mb-4">Detalles del Currículum</h2>
+<h2 class="text-center m-4">Detalles del Currículum</h2>
 <div class="text-center">
   <%= link_to 'Regresar', root_path, class: 'btn btn-secondary' %>
 </div>
@@ -22,19 +22,33 @@
 </div>
 
 
-<div class="m-5">
+  <div class="m-5">
   <h3 class="d-flex justify-content-between align-items-center">
     Enlaces de Contacto
-<%= link_to "Add Contact Link", "#", class: "btn btn-primary mb-3", data: { toggle: "modal", target: "#contactLinkModal" } %>
-
+   <%= link_to "#", class: "btn  btn-sm btn-success", data: { "bs-toggle": "modal", "bs-target": "#contactLinkModal" } do %>
+  <i class="bi bi-plus-lg"></i> <!-- Icono en vez de texto -->
+<% end %>
   </h3>
+  
   <div class="card p-3 mb-3">
     <% if @resume.contact_links.any? %>
-      <ul>
+      <ul class="mb-0">
         <% @resume.contact_links.each do |link| %>
-          <li>
-            <%= link.url.present? ? link.url : 'Debe agregar datos en el campo Enlace de Contacto.' %>
-<%= link_to 'Eliminar', resume_contact_link_path(@resume, link), class: 'btn btn-danger btn-sm ms-2 delete-contact-link', data: { id: link.id } %>
+          <li class="d-flex justify-content-between align-items-center mb-1">
+            <!-- Mostrar el nombre como enlace -->
+            <% if link.url.present? && link.platform.present? %>
+              <a href="<%= link.url %>" target="_blank"><%= link.platform %></a>
+            <% else %>
+              Debe agregar datos en los campos Enlace de Contacto.
+            <% end %>
+            
+            <!-- Botón Eliminar -->
+            <button 
+              type="button" 
+              class="btn btn-danger btn-sm delete-contact-link" 
+              data-id="<%= link.id %>">
+              <i class="bi bi-trash3"></i>
+            </button>
           </li>
         <% end %>
       </ul>
@@ -43,63 +57,152 @@
     <% end %>
   </div>
 
+
   <h3 class="d-flex justify-content-between align-items-center">
     Habilidades
-<%= link_to "Add Skill", "#", class: "btn btn-primary mb-3", data: { toggle: "modal", target: "#skillModal" } %>
-
+<%= link_to "#", class: "btn btn-sm btn-success", data: { "bs-toggle": "modal", "bs-target": "#skillModal" } do %>
+  <i class="bi bi-plus-lg"></i> <!-- Icono en vez de texto -->
+<% end %>
   </h3>
-  <div class="card p-3 mb-3">
-    <% if @resume.skills.any? %>
-      <ul>
-        <% @resume.skills.each do |skill| %>
-          <li>
+<div class="card p-3 mb-3">
+  <% if @resume.skills.any? %>
+    <h5>Habilidades Técnicas</h5>
+    <ul>
+      <% @resume.skills.where(skill_type: 0).each do |skill| %>
+        <li class="d-flex justify-content-between align-items-center mb-1">
+          <span>
             <%= skill.name.present? ? skill.name : 'Debe agregar datos en el campo Habilidad.' %>
-<%= link_to 'Eliminar', resume_skill_path(@resume, skill), class: 'btn btn-danger btn-sm ms-2 delete-skill', data: { id: skill.id } %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No hay habilidades registradas.</p>
-    <% end %>
-  </div>
+          </span>
+          <button 
+            type="button" 
+            class="btn btn-danger btn-sm delete-skill" 
+            data-id="<%= skill.id %>" >
+           <i class="bi bi-trash3"></i>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+    
+    <h5>Habilidades Blandas</h5>
+    <ul>
+      <% @resume.skills.where(skill_type: 1).each do |skill| %>
+        <li class="d-flex justify-content-between align-items-center mb-1">
+          <span>
+            <%= skill.name.present? ? skill.name : 'Debe agregar datos en el campo Habilidad.' %>
+          </span>
+          <button 
+            type="button" 
+            class="btn btn-danger btn-sm delete-skill" 
+            data-id="<%= skill.id %>" >
+            <i class="bi bi-trash3"></i>
+          </button>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No hay habilidades registradas.</p>
+  <% end %>
+</div>
+
 
   <h3 class="d-flex justify-content-between align-items-center">
     Proyectos
-<%= link_to "Add Project", "#", class: "btn btn-primary mb-3", data: { toggle: "modal", target: "#projectModal" } %>
+<%= link_to "#", class: "btn btn-sm btn-success ", data: { "bs-toggle": "modal", "bs-target": "#projectModal" } do %>
+  <i class="bi bi-plus-lg"></i> <!-- Icono en vez de texto -->
+<% end %>
+
+
   </h3>
-  <div class="card p-3 mb-3">
-    <% if @resume.projects.any? %>
-      <ul>
-        <% @resume.projects.each do |project| %>
-          <li>
-            <%= project.title.present? ? project.title : 'Debe agregar datos en el campo Proyecto.' %>
-      <%= link_to 'Eliminar', resume_project_path(@resume, project), class: 'btn btn-danger btn-sm ms-2 delete-project', data: { id: project.id } %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No hay proyectos registrados.</p>
-    <% end %>
-  </div>
+<div class="card p-3 mb-3">
+  <% if @resume.projects.any? %>
+    <div class="row">
+      <% @resume.projects.each do |project| %>
+        <div class="">
+          <div class="card mb-1">
+            <div class="card-body">
+              <!-- Contenedor para el título y el botón de eliminar alineados horizontalmente -->
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                  <% if project.title.present? %>
+                    <a href="<%= project.url %>" target="_blank"><%= project.title %></a>
+                  <% else %>
+                    Debe agregar datos en el campo Proyecto.
+                  <% end %>
+                </h5>
+                <button 
+                  type="button" 
+                  class="btn btn-danger btn-sm delete-project" 
+                  data-id="<%= project.id %>">
+                   <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+
+              <!-- Descripción del proyecto -->
+              <p class="card-text mt-2">
+                <%= project.description.present? ? project.description : 'Descripción no disponible.' %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>No hay proyectos registrados.</p>
+  <% end %>
+</div>
+
 
   <h3 class="d-flex justify-content-between align-items-center">
     Experiencia Laboral
-<%= link_to "Add Experience", "#", class: "btn btn-primary", data: { toggle: "modal", target: "#experienceModal" } %>
+<%= link_to "#", class: "btn btn-sm btn-success", data: { "bs-toggle": "modal", "bs-target": "#experienceModal" } do %>
+  <i class="bi bi-plus-lg"></i> <!-- Icono en vez de texto -->
+<% end %>
+
   </h3>
-  <div class="card p-3 mb-3">
-    <% if @resume.experiences.any? %>
-      <ul>
-        <% @resume.experiences.each do |experience| %>
-          <li>
-            <%= experience.job_title.present? ? experience.job_title : 'Debe agregar datos en el campo Experiencia.' %>
-<%= link_to 'Eliminar', resume_experience_path(@resume, experience), class: 'btn btn-danger btn-sm ms-2 delete-experience', data: { id: experience.id } %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No hay experiencias registradas.</p>
-    <% end %>
-  </div>
+    <div class="card p-3 mb-3">
+  <% if @resume.experiences.any? %>
+    <div class="row">
+      <% @resume.experiences.each do |experience| %>
+        <div >
+          <div class="card mb-1">
+            <div class="card-body">
+              <!-- Título del trabajo y botón de eliminar alineados -->
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                  <%= experience.job_title.present? ? experience.job_title : 'Debe agregar datos en el campo Experiencia.' %>
+                </h5>
+                <button 
+                  type="button" 
+                  class="btn btn-danger btn-sm delete-experience" 
+                  data-id="<%= experience.id %>">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+
+              <!-- Empresa -->
+              <p class="card-subtitle text-muted mt-1"><%= experience.company %></p>
+
+              <!-- Fechas de inicio y fin -->
+              <p class="card-text">
+                <small class="text-muted">
+                  <%= experience.start_date.strftime('%B %Y') %> - <%= experience.end_date.strftime('%B %Y') %>
+                </small>
+              </p>
+
+              <!-- Descripción de la experiencia -->
+              <p class="card-text">
+                <%= experience.description.present? ? experience.description : 'Descripción no disponible.' %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>No hay experiencias registradas.</p>
+  <% end %>
+</div>
+
 </div> 
 <% else %>
   <p>No se encontró el currículum.</p>
@@ -158,6 +261,7 @@
   </div>
 </div>
 
+
 <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -186,6 +290,7 @@
     </div>
   </div>
 </div>
+
 
 <div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
   <div class="modal-dialog">
