@@ -6,51 +6,47 @@
 
   <%= render 'header' %> <!-- Renderiza el partial de encabezado -->
 
-<%= link_to "New Resume", "#", class: "btn btn-success mb-3", data: { "bs-toggle": "modal", "bs-target": "#newResumeModal" } %>
-
-
-
-
   <h3>Your Resumes</h3>
 
-  <div class="row">
+  <div class="row resume-container">
     <% if @resumes.any? %>
       <% @resumes.each do |resume| %>
         <div class="col-md-4 mb-3">
           <div class="d-flex align-items-center p-3 border rounded bg-light">
   
-<svg width="70px" height="70px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V17H6C4.89543 17 4 17.8954 4 19ZM4 19C4 20.1046 4.89543 21 6 21H20M9 7H15M9 11H15M19 17V21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-
+      <i class="bi bi-file-earmark-text" style="font-size: 70px;"></i>
 
             <div class="ms-3">
               <h5 class="mb-1"><%= resume.nombre %></h5>
-              <div>
-  <%= link_to 'Edit', edit_resume_path(resume), class: 'btn btn-warning btn-sm me-1' %>
-  <%= link_to 'Delete', '#', class: 'btn btn-danger btn-sm me-1 delete-resume', data: { id: resume.id }, title: 'Delete Resume' %>
-<button id="downloadResume" class="btn btn-success btn-sm" data-id="<%= resume.id %>">Download</button>
-<%= link_to 'View', resume_path(resume), class: 'btn btn-info btn-sm me-1', title: 'View Resume' %>
-<% if resume.hash_id.nil? %>
-  <%= button_to 'Generar enlace público', generate_public_link_resume_path(resume), method: :post, class: 'btn btn-primary btn-sm me-1' %>
-<% else %>
-  <button class="btn btn-info btn-sm me-1 copy-link-btn" data-url="<%= public_resume_url(resume.hash_id) %>">Copiar enlace</button>
+             <div>
+  <a href="<%= edit_resume_path(resume) %>" class="btn btn-warning btn-sm me-1" title="Edit">
+    <i class="bi bi-pencil-fill"></i> <!-- Icono de edición -->
+  </a>
   
-<% end %>
+  <button class="btn btn-danger btn-sm me-1 delete-resume" data-id="<%= resume.id %>" title="Delete Resume">
+    <i class="bi bi-trash-fill delete-resume"  data-id="<%= resume.id %>"></i> <!-- Icono de eliminación -->
+  </button>
+  
+  <button class="btn btn-success btn-sm downloadResume" data-id="<%= resume.id %>" title="Download">
+    <i class="bi bi-download downloadResume" data-id="<%= resume.id %>" ></i> <!-- Icono de descarga -->
+  </button>
+  
+  <a href="<%= resume_path(resume) %>" class="btn btn-info btn-sm me-1" title="View Resume" target="_blank">
+    <i class="bi bi-eye-fill"></i> <!-- Icono de vista -->
+  </a>
+  
+  <% if resume.hash_id.nil? %>
+    <button type="button" class="btn btn-primary btn-sm me-1 generate-link" data-id="<%= resume.id %>" data-generate-link>
+  <i class="bi bi-link-45deg generate-link" data-id="<%= resume.id %>"></i> <!-- Icono de generar enlace -->
+  Generar enlace público
+</button>
 
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">
-        Enlace copiado al portapapeles.
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
+  <% else %>
+    <button class="btn btn-info btn-sm me-1 copy-link-btn" data-url="<%= public_resume_url(resume.hash_id) %>" title="Copy Link">
+      <i class="bi bi-files copy-link-btn" data-url="<%= public_resume_url(resume.hash_id) %>"></i> <!-- Icono de copiar -->
+    </button>
+  <% end %>
 </div>
-
-</div>
-
             </div>
           </div>
         </div>
@@ -62,96 +58,7 @@
 
 </div>
 
-<div class="modal fade" id="newResumeModal" tabindex="-1" role="dialog" aria-labelledby="newResumeModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newResumeModalLabel">Create New Resume</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="error-message" class="alert alert-danger d-none"></div> <!-- Mensaje de error -->
+<%= render 'new_resume_modal' %> <!-- Renderiza el partial del modal -->
+<%= render 'copy_toast' %> <!-- Renderiza el partial del toast -->
 
-        <form id="newResumeForm">
-          <div class="form-group">
-            <label for="resume_nombre">Resume Name</label>
-            <input type="text" id="resume_nombre" name="resume[nombre]" class="form-control" required>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="createResumeButton" class="btn btn-primary">Create Resume</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  document.getElementById('downloadResume').addEventListener('click', function() {
-  const resumeId = this.getAttribute('data-id');
-  const url = `/resumes/${resumeId}/download`; // Ajusta según tu ruta
-
-  fetch(url, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/pdf',
-    }
-  })
-  .then(response => {
-    if (response.ok) {
-      return response.blob(); // Convierte la respuesta a blob
-    }
-    throw new Error('Network response was not ok.');
-  })
-  .then(blob => {
-    const url = window.URL.createObjectURL(blob); // Crea un URL del blob
-    const a = document.createElement('a'); // Crea un elemento <a>
-    a.style.display = 'none'; // Oculta el elemento
-    a.href = url; // Asigna el URL del blob
-    a.download = `resume_${resumeId}.pdf`; // Nombre del archivo para descargar
-    document.body.appendChild(a); // Añade el elemento al DOM
-    a.click(); // Simula un clic en el elemento
-    window.URL.revokeObjectURL(url); // Libera la URL del blob
-    document.body.removeChild(a); // Remueve el elemento del DOM
-  })
-  .catch(error => {
-    console.error('Error downloading the PDF:', error);
-  });
-});
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  const copyButtons = document.querySelectorAll('.copy-link-btn');
-  const copyToast = new bootstrap.Toast(document.getElementById('copyToast'));
-
-  copyButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const url = button.getAttribute('data-url');
-
-      // Crea un elemento temporal para copiar el texto al portapapeles
-      const tempInput = document.createElement('input');
-      tempInput.value = url;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-
-      // Mostrar el toast
-      copyToast.show();
-
-      // Cambiar el texto del botón brevemente para indicar éxito
-      const originalText = button.innerText;
-      button.innerText = 'Copiado!';
-      setTimeout(() => {
-        button.innerText = originalText;
-      }, 2000); // Restaurar el texto original después de 2 segundos
-    });
-  });
-});
-
-
-
-</script>
-
-<%= javascript_include_tag 'resumes' %>
+<%= javascript_include_tag 'resumes' %> <!-- Incluye el archivo JS para manejar las interacciones -->

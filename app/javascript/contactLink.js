@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
 
   const createContactLinkButton = document.getElementById('createContactLinkButton');

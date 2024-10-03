@@ -1,0 +1,27 @@
+<div class="modal fade" id="skillModal" tabindex="-1" aria-labelledby="skillModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="skillModalLabel">Agregar Habilidad</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="skillForm">
+          <div class="mb-3">
+            <label for="skillName" class="form-label">Nombre de Habilidad</label>
+            <input type="text" class="form-control" id="skillName" required>
+          </div>
+          <div class="mb-3">
+            <label for="skillType" class="form-label">Tipo de Habilidad</label>
+            <select class="form-select" id="skillType" required>
+              <option value="0">Habilidad Técnica</option>
+              <option value="1">Habilidad Blanda</option>
+            </select>
+          </div>
+          <div class="error-message text-danger" id="skillError"></div>
+          <button type="button" id="createSkillButton" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

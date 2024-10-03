@@ -1,7 +1,11 @@
-<h2 class="text-center m-4">Detalles del Currículum</h2>
-<div class="text-center">
-  <%= link_to 'Regresar', root_path, class: 'btn btn-secondary' %>
+<h2 class="text-center my-4 text-primary font-weight-bold">Detalles del Currículum</h2>
+<div class="text-center mb-4">
+  <a href="<%= root_path %>" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-left"></i> Regresar
+  </a>
 </div>
+
+
 
 <% if @resume.present? %>
   <input type="hidden" id="resumeId" value="<%= @resume.id %>">
@@ -208,126 +212,13 @@
   <p>No se encontró el currículum.</p>
 <% end %>
 
-<div class="modal fade" id="contactLinkModal" tabindex="-1" aria-labelledby="contactLinkModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="contactLinkModalLabel">Agregar Enlace de Contacto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="contactLinkForm">
-          <div class="mb-3">
-            <label for="contactLinkPlatform" class="form-label">Plataforma</label>
-            <input type="text" class="form-control" id="contactLinkPlatform" required>
-          </div>
-          <div class="mb-3">
-            <label for="contactLinkUrl" class="form-label">URL</label>
-            <input type="text" class="form-control" id="contactLinkUrl" required>
-          </div>
-          <div class="error-message text-danger" id="contactLinkError"></div>
-          <button type="button" id="createContactLinkButton" class="btn btn-primary">Agregar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="modal fade" id="skillModal" tabindex="-1" aria-labelledby="skillModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="skillModalLabel">Agregar Habilidad</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="skillForm">
-          <div class="mb-3">
-            <label for="skillName" class="form-label">Nombre de Habilidad</label>
-            <input type="text" class="form-control" id="skillName" required>
-          </div>
-          <div class="mb-3">
-            <label for="skillType" class="form-label">Tipo de Habilidad</label>
-            <select class="form-select" id="skillType" required>
-              <option value="0">Habilidad Técnica</option>
-              <option value="1">Habilidad Blanda</option>
-            </select>
-          </div>
-          <div class="error-message text-danger" id="skillError"></div>
-          <button type="button" id="createSkillButton" class="btn btn-primary">Agregar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render 'contact_link_modal' %>
+<%= render 'skill_modal' %>
+<%= render 'project_modal' %>
+<%= render 'experience_modal' %>
 
 
-<div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="projectModalLabel">Agregar Proyecto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="projectForm">
-          <div class="mb-3">
-            <label for="projectTitle" class="form-label">Título del Proyecto</label>
-            <input type="text" class="form-control" id="projectTitle" required>
-          </div>
-          <div class="mb-3">
-            <label for="projectDescription" class="form-label">Descripción</label>
-            <textarea class="form-control" id="projectDescription" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="projectUrl" class="form-label">URL del Proyecto</label>
-            <input type="text" class="form-control" id="projectUrl" required>
-          </div>
-          <div class="error-message text-danger" id="projectError"></div>
-          <button type="button" id="createProjectButton" class="btn btn-primary">Agregar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="experienceModalLabel">Agregar Experiencia</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="experienceForm">
-          <div class="mb-3">
-            <label for="experienceJobTitle" class="form-label">Título de la Experiencia</label>
-            <input type="text" class="form-control" id="experienceJobTitle" required>
-          </div>
-          <div class="mb-3">
-            <label for="experienceCompany" class="form-label">Compañía</label>
-            <input type="text" class="form-control" id="experienceCompany" required>
-          </div>
-          <div class="mb-3">
-            <label for="experienceStartDate" class="form-label">Fecha de Inicio</label>
-            <input type="date" class="form-control" id="experienceStartDate" required>
-          </div>
-          <div class="mb-3">
-            <label for="experienceEndDate" class="form-label">Fecha de Fin</label>
-            <input type="date" class="form-control" id="experienceEndDate" required>
-          </div>
-          <div class="mb-3">
-            <label for="experienceDescription" class="form-label">Descripción</label>
-            <textarea class="form-control" id="experienceDescription" required></textarea>
-          </div>
-          <div class="error-message text-danger" id="experienceError"></div>
-          <button type="button" id="createExperienceButton" class="btn btn-primary">Agregar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 <%= javascript_include_tag 'contactLink' %>
 <%= javascript_include_tag 'experience' %>

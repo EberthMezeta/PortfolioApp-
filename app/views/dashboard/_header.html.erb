@@ -1,5 +1,8 @@
-<div class="alert alert-info" role="alert">
-  <h4 class="alert-heading">Welcome to Your Dashboard!</h4>
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  <div class="d-flex align-items-center">
+    <h4 class="alert-heading me-2">Welcome to Your Dashboard!</h4>
+    <i class="bi bi-person-circle" style="font-size: 30px;"></i>
+  </div>
   
   <p>
     Hello, <strong><%= current_user.first_name %>!</strong> Here you can manage your resumes and showcase your skills.
@@ -9,8 +12,10 @@
   
   <p class="mb-0">Feel free to add, edit, or delete your resumes as needed.</p>
 
-  <!-- Botón de logout -->
-  <div class="mt-3">
-    <%= button_to 'Logout', destroy_user_session_path, method: :delete, class: 'btn btn-danger' %>
+  <div class="mt-3 d-flex justify-content-end">
+    <%= link_to '<i class="bi bi-box-arrow-right"></i> Logout'.html_safe, destroy_user_session_path, method: :delete, class: 'btn btn-light text-dark me-2' %>
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newResumeModal">
+      <i class="bi bi-plus-circle"></i> New Resume
+    </button>
   </div>
 </div>

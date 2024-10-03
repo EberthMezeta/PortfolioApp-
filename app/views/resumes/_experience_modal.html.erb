@@ -1,0 +1,36 @@
+<div class="modal fade" id="experienceModal" tabindex="-1" aria-labelledby="experienceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="experienceModalLabel">Agregar Experiencia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="experienceForm">
+          <div class="mb-3">
+            <label for="experienceJobTitle" class="form-label">Título de la Experiencia</label>
+            <input type="text" class="form-control" id="experienceJobTitle" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceCompany" class="form-label">Compañía</label>
+            <input type="text" class="form-control" id="experienceCompany" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceStartDate" class="form-label">Fecha de Inicio</label>
+            <input type="date" class="form-control" id="experienceStartDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceEndDate" class="form-label">Fecha de Fin</label>
+            <input type="date" class="form-control" id="experienceEndDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="experienceDescription" class="form-label">Descripción</label>
+            <textarea class="form-control" id="experienceDescription" required></textarea>
+          </div>
+          <div class="error-message text-danger" id="experienceError"></div>
+          <button type="button" id="createExperienceButton" class="btn btn-primary">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

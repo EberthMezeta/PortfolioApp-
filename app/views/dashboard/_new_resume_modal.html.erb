@@ -1,0 +1,24 @@
+<div class="modal fade" id="newResumeModal" tabindex="-1" role="dialog" aria-labelledby="newResumeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newResumeModalLabel">Create New Resume</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="error-message" class="alert alert-danger d-none"></div> <!-- Mensaje de error -->
+
+        <form id="newResumeForm">
+          <div class="form-group">
+            <label for="resume_nombre">Resume Name</label>
+            <input type="text" id="resume_nombre" name="resume[nombre]" class="form-control" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="createResumeButton" class="btn btn-primary">Create Resume</button>
+      </div>
+    </div>
+  </div>
+</div>

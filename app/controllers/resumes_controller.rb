@@ -55,10 +55,15 @@ before_action :authenticate_user!, except: [ :public ]
     end
   end
 
-  def generate_public_link
-    @resume.generate_hash_id
-    redirect_to resumes_path, notice: "Enlace público generado con éxito."
+def generate_public_link
+  @resume = Resume.find(params[:id]) # Asegúrate de encontrar el currículum correcto
+
+  if @resume.generate_hash_id
+    render json: { success: true, message: "Enlace público generado con éxito.", url: public_resume_url(@resume.hash_id) }, status: :ok
+  else
+    render json: { success: false, message: "Error al generar el enlace público." }, status: :unprocessable_entity
   end
+end
 
   # Acción para mostrar la versión pública del currículum
   def public
