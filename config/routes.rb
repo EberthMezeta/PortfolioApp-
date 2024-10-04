@@ -15,6 +15,20 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: "users/registrations" }
 
+   devise_scope :user do
+    get "users/custom_view", to: "users/registrations#custom_view", as: :custom_view
+      post "users/custom_create", to: "users/registrations#custom_create", as: "custom_create_user"
+  end
+
+  #  get "user_management", to: "user_management#index", as: "user_management_index"
+  # get "user_management/new", to: "user_management#new", as: "new_user_management"
+  # post "user_management", to: "user_management#create", as: "create_user_management"
+  # get "user_management/:id", to: "user_management#show", as: "user_management"
+  # get "user_management/:id/edit", to: "user_management#edit", as: "edit_user_management"
+  # patch "user_management/:id", to: "user_management#update"
+  # delete "user_management/:id", to: "user_management#destroy"
+
+  # resources :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
