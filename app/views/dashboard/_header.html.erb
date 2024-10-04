@@ -17,5 +17,9 @@
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newResumeModal">
       <i class="bi bi-plus-circle"></i> New Resume
     </button>
+    <% if can? :manage, :all %>
+  <%= link_to 'Usuarios', custom_index_path, class: 'ms-2 btn btn-outline-primary', data: { turbo: false } %>
+
+<% end %>
   </div>
 </div>

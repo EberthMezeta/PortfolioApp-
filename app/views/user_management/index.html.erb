@@ -13,9 +13,20 @@
       <tr>
         <td><%= user.email %></td>
         <td><%= user.role %></td>
+        <td>
+          <!-- Enlace para editar usuario -->
+          <%= link_to 'Editar', custom_edit_user_path(user), class: 'btn btn-warning ms-2' %>
+
+          <!-- Botón para eliminar usuario -->
+          <%= link_to 'Eliminar', custom_destroy_user_path(user), 
+              method: :delete, 
+              data: { confirm: '¿Estás seguro de que deseas eliminar este usuario?' }, 
+              class: 'btn btn-danger ms-2' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'Nuevo Usuario', new_user_management_path  %>
+<!-- Enlace para crear un nuevo usuario -->
+<%= link_to 'Crear Usuario', custom_view_path, class: 'btn btn-outline-primary' %>

@@ -1,13 +1,48 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
-   before_action :authorize_admin!, only: [ :custom_create ] # Asegúrate de que solo admin pueda acceder a custom_create
+  before_action :authorize_admin!, only: [ :custom_create ] # Asegúrate de que solo admin pueda acceder a custom_create
   # Sobrescribir el método de creación
   #
+  #
 
+
+  def custom_index
+      @users = User.all
+      render "user_management/index"
+  end
+
+  # Mostrar formulario para crear un nuevo usuario
   def custom_view
     @user = User.new
     render "user_management/new"
+  end
+
+  def custom_edit
+    @user = User.find(params[:id])
+    render "user_management/edit"
+  end
+
+
+  def custom_update
+    @user = User.find(params[:id])
+
+    if @user.update(user_params)
+      redirect_to custom_index_path, notice: "¡Usuario actualizado exitosamente!"
+    else
+      render "user_management/edit", alert: "Hubo un error al actualizar el usuario."
+    end
+  end
+
+  # Eliminar un usuario
+  def custom_destroy
+    @user = User.find(params[:id])
+
+    if @user.destroy
+      redirect_to custom_index_path, notice: "Usuario eliminado exitosamente."
+    else
+      redirect_to custom_index_path, alert: "No se pudo eliminar el usuario."
+    end
   end
 
   def custom_create
@@ -15,7 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     if @user.save
       # Inicia sesión al usuario si la creación fue exitosa
-      redirect_to root_path, notice: "¡Usuario registrado exitosamente!"
+      redirect_to custom_index_path, notice: "¡Usuario registrado exitosamente!"
     else
       # Renderiza la vista de registro en caso de error
       puts "eg"
