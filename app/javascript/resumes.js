@@ -3,6 +3,7 @@
 // app/assets/javascripts/resumes.js
 
 document.addEventListener('DOMContentLoaded', function () {
+
   const createResumeButton = document.getElementById('createResumeButton');
   const errorMessageElement = document.getElementById('error-message');
   const resumeInput = document.getElementById('resume_nombre');
