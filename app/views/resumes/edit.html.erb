@@ -5,25 +5,34 @@
   </a>
 </div>
 
-
-
-<% if @resume.present? %>
+<div class="container">
+  <% if @resume.present? %>
   <input type="hidden" id="resumeId" value="<%= @resume.id %>">
 
   <div class="resume-details mb-4">
   
-<div class="d-flex justify-content-center align-items-center p-3 mb-3" style="gap: 0.5rem;">
-  <div class="text-center">
-    <span><strong><%= @resume.user.first_name.present? ? @resume.user.first_name : 'Debe agregar datos en el campo First Name.' %></strong></span>
-    <span><strong><%= @resume.user.last_name.present? ? @resume.user.last_name : 'Debe agregar datos en el campo Last Name.' %></strong></span>
+<div class="card d-flex justify-content-center align-items-center mx-5 p-4 mb-4">
+  <div class="text-center mb-1">
+    <h2 class="text-primary font-weight-bold mb-1">
+      <%= @resume.user.first_name.present? ? @resume.user.first_name : 'Nombre no disponible.' %> 
+      <%= @resume.user.last_name.present? ? @resume.user.last_name : 'Apellido no disponible.' %>
+    </h2>
   </div>
-  <div class="text-center">
-    <span><strong><%= @resume.user.occupation.present? ? @resume.user.occupation : 'Debe agregar datos en el campo Occupation.' %></strong></span>
+
+  <div class="text-center mb-2">
+    <h5 class="text-secondary">
+      <%= @resume.user.occupation.present? ? @resume.user.occupation : 'Ocupación no disponible.' %>
+    </h5>
   </div>
-  <div class="text-center">
-    <span><strong><%= @resume.user.email.present? ? @resume.user.email : 'Debe agregar datos en el campo Email.' %></strong></span>
-  </div>
+
+  <div class="text-center mb-2">
+  <a href="mailto:<%= @resume.user.email %>" class="text-decoration-none text-dark">
+    <%= @resume.user.email.present? ? @resume.user.email : 'Email no disponible.' %>
+  </a>
 </div>
+
+</div>
+
 
 
   <div class="m-5">
@@ -211,6 +220,9 @@
 <% else %>
   <p>No se encontró el currículum.</p>
 <% end %>
+
+</div>
+
 
 
 <%= render 'contact_link_modal' %>

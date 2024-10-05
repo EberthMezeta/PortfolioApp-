@@ -9,7 +9,7 @@ class Ability
     else
       can :read, User # Los usuarios pueden leer sus propios datos
       can :update, User, id: user.id # Pueden actualizar su propio perfil
-
+      can :creat, User
       # Agregar más permisos según sea necesario
       # Por ejemplo, permitir a un usuario regular ver productos
 

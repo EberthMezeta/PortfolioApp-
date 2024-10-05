@@ -34,16 +34,17 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  # Eliminar un usuario
-  def custom_destroy
-    @user = User.find(params[:id])
+# Eliminar un usuario
+def custom_destroy
+  @user = User.find(params[:id])
 
-    if @user.destroy
-      redirect_to custom_index_path, notice: "Usuario eliminado exitosamente."
-    else
-      redirect_to custom_index_path, alert: "No se pudo eliminar el usuario."
-    end
+  if @user.destroy
+    render json: { message: "Usuario eliminado exitosamente." }, status: :ok
+  else
+    render json: { error: "No se pudo eliminar el usuario." }, status: :unprocessable_entity
   end
+end
+
 
   def custom_create
     @user = User.new(user_params)
@@ -53,7 +54,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       redirect_to custom_index_path, notice: "¡Usuario registrado exitosamente!"
     else
       # Renderiza la vista de registro en caso de error
-      puts "eg"
+      redirect_to custom_view_path
     end
   end
 
@@ -69,14 +70,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(:account_update, keys: [ :first_name, :last_name, :occupation ])
   end
 
-  def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :role)
-  end
+def user_params
+  params.require(:user).permit(:email, :password, :password_confirmation, :role, :first_name, :last_name, :occupation)
+end
+
 
   private
 
   def authorize_admin!
     puts "Rol del usuario actual: #{current_user.role}"
-    authorize! :create, User # Esto levantará una excepción si el usuario no tiene permiso
+    authorize! :create,  User # Esto levantará una excepción si el usuario no tiene permiso
   end
 end

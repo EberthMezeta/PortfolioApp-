@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_04_013522) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_05_032639) do
   create_table "contact_links", charset: "utf8mb4", force: :cascade do |t|
     t.string "platform"
     t.string "url"
@@ -71,7 +71,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_04_013522) do
     t.string "first_name"
     t.string "last_name"
     t.string "occupation"
-    t.string "role"
+    t.string "role", default: "user"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
